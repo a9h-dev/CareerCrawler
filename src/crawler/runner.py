@@ -1,9 +1,10 @@
 from .db import init_db, insert_jobs, start_crawl_run, finish_crawl_run
-from .sources import remoteok
+from .sources import remoteok, hackernews
 
 
 SOURCES = {
     "remoteok": remoteok.fetch,
+    "hackernews": hackernews.fetch,
 }
 
 
