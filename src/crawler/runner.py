@@ -1,10 +1,11 @@
 from .db import init_db, insert_jobs, start_crawl_run, finish_crawl_run
-from .sources import remoteok, hackernews
+from .sources import remoteok, hackernews, remotive
 
 
 SOURCES = {
     "remoteok": remoteok.fetch,
     "hackernews": hackernews.fetch,
+    "remotive": remotive.fetch,
 }
 
 
