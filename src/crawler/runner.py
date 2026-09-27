@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from .db import init_db, insert_jobs, start_crawl_run, finish_crawl_run, get_jobs
-from .sources import remoteok, hackernews, remotive, jobicy, themuse
+from .sources import remoteok, hackernews, remotive, jobicy, themuse, wellfound
 
 
 SOURCES = {
@@ -11,6 +11,7 @@ SOURCES = {
     "remotive": remotive.fetch,
     "jobicy": jobicy.fetch,
     "themuse": themuse.fetch,
+    "wellfound": wellfound.fetch,
 }
 
 
