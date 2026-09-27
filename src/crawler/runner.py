@@ -2,13 +2,15 @@ import json
 from pathlib import Path
 
 from .db import init_db, insert_jobs, start_crawl_run, finish_crawl_run, get_jobs
-from .sources import remoteok, hackernews, remotive
+from .sources import remoteok, hackernews, remotive, jobicy, themuse
 
 
 SOURCES = {
     "remoteok": remoteok.fetch,
     "hackernews": hackernews.fetch,
     "remotive": remotive.fetch,
+    "jobicy": jobicy.fetch,
+    "themuse": themuse.fetch,
 }
 
 
