@@ -1,4 +1,7 @@
-from .db import init_db, insert_jobs, start_crawl_run, finish_crawl_run
+import json
+from pathlib import Path
+
+from .db import init_db, insert_jobs, start_crawl_run, finish_crawl_run, get_jobs
 from .sources import remoteok, hackernews, remotive
 
 
@@ -7,6 +10,13 @@ SOURCES = {
     "hackernews": hackernews.fetch,
     "remotive": remotive.fetch,
 }
+
+
+def export_json() -> None:
+    jobs = get_jobs(active_only=True, limit=10000)
+    data = [dict(row) for row in jobs]
+    Path("data/jobs.json").write_text(json.dumps(data, indent=2))
+    print(f"Exported {len(data)} jobs to data/jobs.json")
 
 
 def run_all() -> None:
@@ -22,3 +32,5 @@ def run_all() -> None:
         except Exception as e:
             finish_crawl_run(run_id, 0, 0, status="error", error_msg=str(e))
             print(f"{source_name}: FAILED — {e}")
+
+    export_json()
