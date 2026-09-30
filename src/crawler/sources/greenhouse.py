@@ -5,12 +5,20 @@ SOURCE = "greenhouse"
 HEADERS = {"User-Agent": "CareerCrawler/1.0"}
 
 COMPANIES = [
+    # India
     "groww",
     "slice",
+    "appsflyer",
+    # Global
     "gitlab",
     "datadog",
     "netlify",
     "planetscale",
+    "cloudflare",
+    "mongodb",
+    "vercel",
+    "tailscale",
+    "airtable",
 ]
 
 
