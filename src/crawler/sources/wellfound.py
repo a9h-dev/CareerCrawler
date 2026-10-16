@@ -33,21 +33,36 @@ def fetch() -> list[Job]:
                         continue
 
                     # get the parent container text for company/location/salary
-                    parent_text = link.evaluate("el => el.closest('div') ? el.closest('div').innerText : ''")
+                    # the link's own wrapper only holds the title; walk up until the
+                    # container also includes the meta line, stopping before it
+                    # grows into the whole job list
+                    parent_text = link.evaluate(
+                        """el => {
+                            let e = el;
+                            for (let i = 0; i < 4; i++) {
+                                e = e.parentElement;
+                                if (!e) break;
+                                if (e.querySelectorAll("a[href*='/jobs/']").length > 1) break;
+                                if (e.innerText.includes('•')) return e.innerText;
+                            }
+                            return '';
+                        }"""
+                    )
                     lines = [l.strip() for l in parent_text.split("\n") if l.strip()]
 
-                    company = lines[1] if len(lines) > 1 else None
+                    company = None
                     location = None
                     salary = None
 
-                    # parse meta line — usually "Company • Location • Salary"
-                    if len(lines) > 1:
-                        meta = lines[1]
+                    # parse meta line — "Company • Remote/Onsite • Location • ... • Salary"
+                    meta = next((l for l in lines[1:] if "•" in l), None)
+                    if meta:
                         parts = [p.strip() for p in meta.split("•")]
-                        if len(parts) >= 2:
-                            company = parts[0]
-                            location = parts[1] if len(parts) > 1 else None
-                            salary = next((p for p in parts if "$" in p), None)
+                        company = parts[0] or None
+                        location = parts[2] if len(parts) > 2 else None
+                        salary = next((p for p in parts if "$" in p or "₹" in p), None)
+                        if location == salary:
+                            location = None
 
                     url = BASE + href if href.startswith("/") else href
 
